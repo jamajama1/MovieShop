@@ -6,24 +6,40 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Models;
+using Infrastructure.Services;
 
 namespace MovieShopMVC.Controllers
+
 {
     public class HomeController : Controller
     {
-        public HomeController()
-        {
-            
-        }
-
+        //Routing
+        //https://localhost/home/index
+        // by default its get
         [HttpGet]
         public IActionResult Index()
+        {
+            // call movie service class to get list of movie card models
+            MovieService service = new MovieService();
+            var movieCards = service.GetTop30RevenueMovies();
+            // passing data from controler to view, strongly typed models
+            // ViewBag and ViewData
+            //  ViewBag.PageTitle = "Top Revenue Movies";
+            // ViewData["xyz"] = "test data";
+            return View(movieCards);
+        }
+
+        //https://localhost/home/privacy
+        [HttpGet]
+        public IActionResult Privacy()
         {
             return View();
         }
 
+        //https://localhost/home/topmovies
         [HttpGet]
-        public IActionResult Privacy()
+        public IActionResult TopMovies()
         {
             return View();
         }
