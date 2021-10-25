@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 namespace ApplicationCore.Entities
 {
     [Table("Genre")]
-   public class Genre
+    public class Genre
     {
         public int Id { get; set; }
 
-        [MaxLength(24)]
+        [MaxLength(64)]
         public string Name { get; set; }
+
+        // Navigation Property
+        public ICollection<MovieGenre> Movies { get; set; }
     }
 }

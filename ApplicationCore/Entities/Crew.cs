@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Entities
 {
-    public class Role
+    public class Crew
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
+        public string? Gender { get; set; }
+        public string? TmdbUrl { get; set; }
+        public string? ProfilePath { get; set; }
+        public ICollection<MovieCrew> Movies { get; set; }
     }
 }
