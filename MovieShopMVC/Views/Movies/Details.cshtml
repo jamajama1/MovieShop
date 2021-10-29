@@ -1,0 +1,84 @@
+﻿@model ApplicationCore.Models.MovieDetailsResponseModel
+
+@{
+    ViewData["Title"] = "_MovieDetails";
+}
+
+
+    <img src="@Model.BackdropUrl" style="display: inline-block; overflow: hidden; filter: brightness(60%); position: absolute; height: 450px; width: 100%; filter: brightness(35%);"/>
+
+
+<div class="container" style="">
+    
+    <div class="row" style="overflow:auto">
+
+        <div class="col">
+
+            <img src="@Model.PosterUrl" style="margin: 20px; position: relative; height: 400px;;" />
+        </div>
+
+        <div class="col">
+            <dl style="color: floralwhite">
+                <br />
+                <h3 class="col-sm-10" style="overflow-wrap: break-word;">
+                    @Html.DisplayFor(model => model.Title)
+                </h3>
+                <p style="color:darkgrey" class="col-sm-10" style="overflow-wrap: break-word;">
+                    @Html.DisplayFor(model => model.Tagline)
+                </p>
+                <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                    @Html.DisplayFor(model => model.RunTime) | @Model.ReleaseDate
+                </dd>
+                <div class="col-sm-10" style="display:inline-block; overflow-wrap: break-word;">
+                    @foreach (var genre in Model.Genres)
+                    {
+                        <span class="button rounded-pill">@genre.Name</span>
+                    }
+                </div>
+                <div>
+                    <span class="button rounded-pill">@Model.Rating</span>
+                </div>
+                <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                    @Html.DisplayFor(model => model.Overview)
+                </dd>
+            </dl>
+        </div>
+        <div class="col">
+            <br /><button style="width: 200px;" type="button" class="btn btn-outline-light">Review</button><br /><br />
+            <button style="width: 200px;" type="button" class="btn btn-light">Buy $@Html.DisplayFor(model => model.Price)</button>
+        </div>
+    </div>
+        <hr />
+        <div class="row">
+            <div class="col">
+                <dl>
+                    <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                        <span class="fa-duotone fa-calendar-days">Release Date @Html.DisplayFor(model => model.ReleaseDate)</span>                         
+                    </dd>
+                    <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                       Run Time @Html.DisplayFor(model => model.RunTime)
+                    </dd>
+                    <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                        Box Office @Html.DisplayFor(model => model.Revenue)
+                    </dd>
+                    <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                        Budget @Html.DisplayFor(model => model.Budget)
+                    </dd>
+                </dl>
+                Trailers
+                <hr />
+                <dl>
+                    <dd class="col-sm-10" style="overflow-wrap: break-word;">
+                        @foreach (var trailer in Model.Trailers)
+                        {   
+                            <a href="@trailer.TrailerUrl">@trailer.Name</a><br />
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="col">
+                <partial name="_MovieCast" model="Model.Casts" />
+            </div>
+        </div>
+    </div>
+

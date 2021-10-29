@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.RepositoryInterfaces
 {
-    public interface IMovieRepository
+
+    public interface IUserRepository
     {
-        // method thtas gonn aget 30 highest revenue movies
-        Task<IEnumerable<Movie>> GetTop30RevenueMovies();
-
-        Task<Movie> GetMovieById(int id);
-
+        Task<User> GetUserByEmail(string email);
+        Task<User> AddUser(User user);
     }
+
 }
+
+

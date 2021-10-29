@@ -70,7 +70,7 @@ namespace Infrastructure.Data
             builder.ToTable("MovieCast");
             builder.HasKey(mc => new { mc.MovieId, mc.CastId, mc.Character });
             builder.Property(mc=>mc.Character).HasMaxLength(450);
-            builder.HasOne(m => m.Movie).WithMany(m => m.Cast).HasForeignKey(m => m.MovieId);
+            builder.HasOne(m => m.Movie).WithMany(m => m.Casts).HasForeignKey(m => m.MovieId);
             builder.HasOne(c => c.Cast).WithMany(c => c.Movies).HasForeignKey(c => c.CastId);
         }
 
