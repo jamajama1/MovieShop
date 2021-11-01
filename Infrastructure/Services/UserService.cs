@@ -13,8 +13,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class UserService : IUserService
+    public class UserService: IUserService
     {
+        //test@abc.com
+        //abc123
         private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository)
@@ -49,7 +51,7 @@ namespace Infrastructure.Services
             };
 
             // use EF to save this user in the user table
-            var newUser = await _userRepository.AddUser(user);
+            var newUser = await _userRepository.Add(user);
             return newUser.Id;
         }
 

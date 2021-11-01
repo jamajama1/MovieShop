@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.RepositoryInterfaces
 {
-
-    public interface IUserRepository: IAsyncRepository<User>
+    public interface IFavoriteRepository: IAsyncRepository<Favorite>
     {
-        Task<User> GetUserByEmail(string email);
+        Task<IEnumerable<Favorite>> GetUserFavorites(int id);
     }
-
 }
-
-

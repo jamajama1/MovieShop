@@ -21,10 +21,8 @@ namespace Infrastructure.Services
         public async Task<MovieDetailsResponseModel> GetMovieDetails(int id)
         {
             var movie = await _movieRepository.GetMovieById(id);
-            if(movie == null)
-            {
-                throw new Exception($"No Movie found for this {id}");
-            }
+            if (movie == null) throw new Exception("Movie");
+            // var favoritesCount = await _favoriteRepository.GetCountAsync(f => f.MovieId == id);
             var movieDetails = new MovieDetailsResponseModel
             {
                 Id = movie.Id,
@@ -38,33 +36,28 @@ namespace Infrastructure.Services
                 Tagline = movie.Tagline,
                 Title = movie.Title,
                 RunTime = movie.RunTime,
-                BackdropUrl = movie.BackdropUrl,               
+                BackdropUrl = movie.BackdropUrl,
                 ImdbUrl = movie.ImdbUrl,
                 TmdbUrl = movie.TmdbUrl
             };
 
             foreach (var genre in movie.Genres)
-            {
-                movieDetails.Genres.Add(
-                    new GenreModel { 
-                    Id = genre.GenreId, 
-                    Name = genre.Genre.Name 
-                    });
-            }
+                movieDetails.Genres.Add(new GenreModel
+                {
+                    Id = genre.Genre.Id,
+                    Name = genre.Genre.Name
+                });
 
-            foreach(var cast in movie.Casts)
-            {
-                movieDetails.Casts.Add(
-                    new CastResponseModel { 
-                    Id = cast.CastId, 
-                    Character = cast.Character,
+            foreach (var cast in movie.Casts)
+                movieDetails.Casts.Add(new CastResponseModel
+                {
+                    Id = cast.Cast.Id,
                     Name = cast.Cast.Name,
+                    Character = cast.Character,
                     ProfilePath = cast.Cast.ProfilePath
-                    });
-            }
+                });
 
-            foreach(var trailer in movie.Trailers)
-            {
+            foreach (var trailer in movie.Trailers)
                 movieDetails.Trailers.Add(new TrailerResponseModel
                 {
                     Id = trailer.Id,
@@ -72,9 +65,6 @@ namespace Infrastructure.Services
                     TrailerUrl = trailer.TrailerUrl,
                     MovieId = trailer.MovieId
                 });
-            }
-
-
             return movieDetails;
         }
 

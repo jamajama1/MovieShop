@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.RepositoryInterfaces
 {
-
-    public interface IUserRepository: IAsyncRepository<User>
+    public interface IPurchaseRepository: IAsyncRepository<Purchase>
     {
-        Task<User> GetUserByEmail(string email);
+        Task<IEnumerable<Purchase>> GetUserPurchases(int id);
     }
-
 }
-
-

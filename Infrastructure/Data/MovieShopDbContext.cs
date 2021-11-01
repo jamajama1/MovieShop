@@ -61,8 +61,9 @@ namespace Infrastructure.Data
             builder.ToTable("Review");
             builder.HasKey(r => new { r.MovieId, r.UserId });
             builder.Property(m => m.Rating).HasColumnType("decimal(3, 2)");
-            builder.HasOne(m => m.Movie).WithMany(r => r.Reviews).HasForeignKey(m => m.MovieId);
-            builder.HasOne(u => u.User).WithMany(u => u.Reviews).HasForeignKey(m => m.UserId);
+    /*-->*/ builder.HasOne(m => m.Movie).WithMany(r => r.Reviews).HasForeignKey(m => m.MovieId);
+    /*-->*/ builder.HasOne(u => u.User).WithMany(u => u.Reviews).HasForeignKey(m => m.UserId);
+
         }
 
         private void ConfigureMovieCast(EntityTypeBuilder<MovieCast> builder)
@@ -107,6 +108,7 @@ namespace Infrastructure.Data
             builder.Property(u => u.FirstName).HasMaxLength(128);
             builder.Property(u => u.LastName).HasMaxLength(128);
             builder.Property(u => u.DateOfBirth).HasMaxLength(7);
+            builder.HasIndex(u => u.Email).IsUnique();
             builder.Property(u => u.Email).HasMaxLength(256);
             builder.Property(u => u.HashedPassword).HasMaxLength(1024);
             builder.Property(u => u.Salt).HasMaxLength(1024);
@@ -118,6 +120,7 @@ namespace Infrastructure.Data
         private void ConfigureRole(EntityTypeBuilder<Role> builder)
         {
             builder.ToTable("Role");
+            builder.HasKey(r => r.Id);
             builder.Property(r => r.Name).HasMaxLength(20);
         }
 
@@ -145,6 +148,7 @@ namespace Infrastructure.Data
             // specify all the constarints and rules for Movie Table/Entity
             builder.ToTable("Movie");
             builder.HasKey(m => m.Id);
+            //builder.HasIndex(m => m.Id);
             builder.Property(m => m.Title).HasMaxLength(256);
             builder.Property(m => m.Overview).HasMaxLength(4096);
             builder.Property(m => m.Tagline).HasMaxLength(512);

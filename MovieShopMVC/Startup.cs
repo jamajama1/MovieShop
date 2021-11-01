@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieShopMVC.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,19 @@ namespace MovieShopMVC
         {
             // IOC
             services.AddControllersWithViews();
-            services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddHttpContextAccessor();
+            
 
             // inject connection string from appsetting.json to MovieShopDbContext
 
@@ -49,6 +59,7 @@ namespace MovieShopMVC
                     options.ExpireTimeSpan = TimeSpan.FromHours(2);
                     options.LoginPath = "/account/login";
                 });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,10 +75,14 @@ namespace MovieShopMVC
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
