@@ -19,10 +19,27 @@ namespace Infrastructure.Services
             _reviewRepository = reviewRepository;
         }
 
-        public async Task<IEnumerable<Review>> GetUserReviews(int id)
+        public async Task<UserReviewResponseModel> GetUserReviews(int id)
         {
-            var reviews = await _reviewRepository.Get(r => r.UserId == id);
-            return reviews;
+            var reviews = await _reviewRepository.GetUserReviews(id);
+
+            var userReviews = new UserReviewResponseModel { MovieReviews = new List<MovieReviewResponseModel>() };
+
+            foreach (var review in reviews)
+            {
+                var reviewModel = new MovieReviewResponseModel
+                {
+                    MovieId = review.MovieId,
+                    UserId = review.UserId,
+                    Name = review.Movie.Title,
+                    Rating = review.Rating,
+                    ReviewText = review.ReviewText
+                };
+                userReviews.UserId = review.UserId;
+                userReviews.MovieReviews.Add(reviewModel);
+            }
+
+            return userReviews;
         }
 
         public async Task PostUserReview(UserReviewRequestModel requestModel)
@@ -33,6 +50,7 @@ namespace Infrastructure.Services
                 MovieId = requestModel.MovieId,
                 Rating = requestModel.Rating,
                 ReviewText = requestModel.ReviewText
+                
             };
 
             var newReview = await _reviewRepository.Add(review);

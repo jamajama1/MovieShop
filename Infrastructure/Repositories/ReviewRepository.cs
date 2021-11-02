@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.RepositoryInterfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,13 @@ namespace Infrastructure.Repositories
         public ReviewRepository(MovieShopDbContext dbContext): base(dbContext)
         {
 
+        }
+
+        public async Task<IEnumerable<Review>> GetUserReviews(int id)
+        {
+            var reviews = await _dbContext.Reviews.Where(u=> u.UserId == id).Include(f => f.Movie).OrderByDescending(f => f.MovieId).ToListAsync();
+
+            return reviews;
         }
     }
 }

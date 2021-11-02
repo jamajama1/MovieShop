@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.RepositoryInterfaces
 {
-    public interface IReviewRepository: IAsyncRepository<Review>
+    public interface IGenreRepository: IAsyncRepository<Genre>
     {
-        Task<IEnumerable<Review>> GetUserReviews(int id);
+        Task<List<Genre>> GetGenres();
     }
 }

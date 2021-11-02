@@ -56,7 +56,7 @@ namespace MovieShopMVC.Controllers
             //var userId = _currentUserService.UserId;
             //pass the user id to the UserService, that will pass to UserRepository
 
-            var purchase = _purchaseService.PurchaseMovie(requestModel);
+            var purchase = await _purchaseService.PurchaseMovie(requestModel);
             
             return View(purchase);
         }
@@ -81,6 +81,10 @@ namespace MovieShopMVC.Controllers
         {
             // get all the movies purchased by user => List<MovieCard>
             var purchases = await _purchaseService.GetUserPurchases(_currentUserService.UserId);
+            if (purchases == null)
+            {
+                throw new Exception("No purchases found");
+            } 
             return View(purchases);
         }
 
