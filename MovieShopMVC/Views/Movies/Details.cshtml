@@ -1,4 +1,6 @@
 ﻿@model ApplicationCore.Models.MovieDetailsResponseModel
+@using Infrastructure.Services
+
 
 @{
     ViewData["Title"] = "_MovieDetails";
@@ -45,7 +47,21 @@
         </div>
         <div class="col">
             <br /><button style="width: 200px;" type="button" class="btn btn-outline-light">Review</button><br /><br />
-            <button style="width: 200px;" type="button" class="btn btn-light">Buy $@Html.DisplayFor(model => model.Price)</button>
+            <form method="POST" asp-action="Favorite">
+                <button style="width: 200px;" type="submit" class="btn btn-outline-light">Favorite</button>
+            </form><br />
+            @if (true)
+            {
+                <form method="POST" asp-controller="User" asp-action="Purchase">
+                    <button style="width: 200px;" type="hidden" id="MovieId" name="MovieId" value="@Model.Id" class="btn btn-light">Buy $@Html.DisplayFor(model => model.Price)</button>
+                </form>
+            }
+            else
+            {
+                <form method="POST" asp-controller="User" asp-action="Purchase">
+                    <button style="width: 200px;" type="hidden" id="MovieId" name="MovieId" value="@Model.Id" class="btn btn-light">Buy $@Html.DisplayFor(model => model.Price)</button>
+                </form>
+            }
         </div>
     </div>
         <hr />
@@ -65,7 +81,7 @@
                         Budget $@Html.DisplayFor(model => model.Budget)
                     </dd>
                 </dl>
-                Trailers
+                    <h5>Trailers</h5>
                 <hr />
                 <dl>
                     <dd class="col-sm-10" style="overflow-wrap: break-word;">

@@ -4,17 +4,6 @@
 @if (_currentUserService.IsAuthenticated)
 {
     //if authenticate show user First Name, Last Name, Edit Profile, Logout
-    @*<div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-            @_currentUserService.FullName
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" asp-controller="User" asp-action="Purchases">Purchases</a></li>
-            <li><a class="dropdown-item" asp-controller="User" asp-action="Favorites">Favorites</a></li>
-            <li><a class="dropdown-item" asp-controller="User" asp-action="">Edit Profile</a></li>
-            <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Logout</a></li>
-        </ul>
-    </div>*@
 
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
@@ -23,6 +12,7 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" asp-controller="User" asp-action="Purchases">Purchases</a></li>
             <li><a class="dropdown-item" asp-controller="User" asp-action="Favorites">Favorites</a></li>
+            <li><a class="dropdown-item" asp-controller="User" asp-action="Reviews">Reviews</a></li>
             <li><a class="dropdown-item" asp-controller="User" asp-action="">Edit Profile</a></li>
             <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Logout</a></li>
         </div>

@@ -17,9 +17,10 @@ namespace Infrastructure.Repositories
 
         }
 
-        public Task<List<Genre>> GetGenres()
+        public async Task<List<Genre>> GetGenres()
         {
-            var genres = _dbContext.Genres.DefaultIfEmpty().ToListAsync();
+            var genres = await _dbContext.Genres.Select(g=> new Genre (g.Id, g.Name)).DefaultIfEmpty().ToListAsync();
+            
             return genres;
         }
     }

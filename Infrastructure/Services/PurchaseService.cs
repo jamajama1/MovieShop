@@ -13,16 +13,18 @@ namespace Infrastructure.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IMovieRepository _movieRepository;
 
-        public PurchaseService(IPurchaseRepository purchaseRepository)
-        {
+        public PurchaseService(IPurchaseRepository purchaseRepository, IMovieRepository movieRepository)
+        { 
             _purchaseRepository = purchaseRepository;
+            _movieRepository = movieRepository;
         }
 
-        public async Task<List<MovieCardResponseModel>> GetUserPurchases(int id)
+        public async Task<List<MovieCardResponseModel>> GetAllPurchases(int id)
         {
             {
-                var purchases = await _purchaseRepository.GetUserPurchases(id);
+                var purchases = await _purchaseRepository.GetAllPurchases(id);
 
                 if (purchases == null)
                 {
@@ -32,11 +34,12 @@ namespace Infrastructure.Services
                 var purchaseMovieCard = new List<MovieCardResponseModel>();
                 foreach (var purchase in purchases)
                 {
+                    var movie = _movieRepository.GetMovieById(purchase.MovieId);
                     purchaseMovieCard.Add(new MovieCardResponseModel
                     {
                         Id = purchase.Id,
-                        /*Title = purchase.Movie.Title,
-                        PosterUrl = purchase.Movie.PosterUrl*/
+                        Title = movie.Result.Title,
+                        PosterUrl = movie.Result.PosterUrl
                     });
                 }
 
@@ -44,21 +47,6 @@ namespace Infrastructure.Services
 
                 return purchaseMovieCard;
             }
-        }
-
-        public async Task<int> PurchaseMovie(UserPurchaseRequestModel requestModel)
-        {
-            var purchase = new Purchase
-            {
-                MovieId = requestModel.MovieId,
-                UserId = requestModel.UserId,
-                PurchaseDateTime = DateTime.Now,
-                PurchaseNumber = Guid.NewGuid(),
-                TotalPrice = requestModel.Total,          
-            };
-
-            var purchaseId = await _purchaseRepository.Add(purchase);
-            return purchaseId.Id;
         }
     }
 }

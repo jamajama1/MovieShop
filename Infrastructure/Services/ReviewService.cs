@@ -19,11 +19,11 @@ namespace Infrastructure.Services
             _reviewRepository = reviewRepository;
         }
 
-        public async Task<UserReviewResponseModel> GetUserReviews(int id)
+        public async Task<ReviewResponseModel> GetUserReviews(int id)
         {
             var reviews = await _reviewRepository.GetUserReviews(id);
 
-            var userReviews = new UserReviewResponseModel { MovieReviews = new List<MovieReviewResponseModel>() };
+            var userReviews = new ReviewResponseModel { MovieReviews = new List<MovieReviewResponseModel>() };
 
             foreach (var review in reviews)
             {
@@ -42,7 +42,7 @@ namespace Infrastructure.Services
             return userReviews;
         }
 
-        public async Task PostUserReview(UserReviewRequestModel requestModel)
+        public async Task PostUserReview(ReviewRequestModel requestModel)
         {
             var review = new Review
             {

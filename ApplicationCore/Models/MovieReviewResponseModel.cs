@@ -7,5 +7,6 @@
         public string ReviewText { get; set; }
         public decimal Rating { get; set; }
         public string Name { get; set; }
+        public string CardUrl { get; set; }
     }
 }

@@ -1,0 +1,15 @@
+﻿@model ApplicationCore.Models.ReviewResponseModel
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h1>Reviews</h1>
+<hr />
+<table class="table">
+    <tbody>
+
+        <partial name="_ReviewCard" model="Model.MovieReviews" />
+
+    </tbody>
+</table>

@@ -18,10 +18,17 @@ namespace Infrastructure.Services
         //test@abc.com
         //abc123
         private readonly IUserRepository _userRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IMovieRepository _movieRepository;
+        private readonly IReviewRepository _reviewRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository, 
+                            IMovieRepository movieRepository, IReviewRepository reviewRepository)
         {
             _userRepository = userRepository;
+            _purchaseRepository = purchaseRepository;
+            _movieRepository = movieRepository;
+            _reviewRepository = reviewRepository;
         }
 
         public async Task<int> RegisterUser(UserRegisterRequestModel requestModel)
@@ -102,6 +109,110 @@ namespace Infrastructure.Services
             }
 
             return null;
+        }
+
+
+        public async Task<PurchaseDetailsResponseModel> PurchaseMovie(PurchaseRequestModel purchaseRequest, int userId)
+        {
+
+            var purchase = new Purchase
+            {
+                MovieId = purchaseRequest.MovieId,
+                PurchaseNumber = (Guid)(purchaseRequest.PurchaseNumber),
+                UserId = userId
+            };
+
+            var addPurchase = await _purchaseRepository.Add(purchase);
+            var movie = await _movieRepository.GetMovieById(purchaseRequest.MovieId);
+            var purchaseRespone = new PurchaseDetailsResponseModel
+            {
+                Title = movie.Title,
+                PurchaseDateTime = addPurchase.PurchaseDateTime,
+                ReleaseDate = (DateTime)movie.ReleaseDate,
+                PosterUrl = movie.PosterUrl,
+                PurchaseNumber = addPurchase.PurchaseNumber,
+                TotalPrice = (decimal)movie.Price,
+            };
+
+            return purchaseRespone;
+        }
+
+        public async Task<bool> IsMoviePurchased(PurchaseRequestModel purchaseRequest, int userId)
+        {
+            var isFound = await _purchaseRepository.CheckPurchaseByMovieId(purchaseRequest.MovieId);
+
+            if (isFound == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<PurchaseResponseModel> GetAllPurchasesForUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PurchaseDetailsResponseModel> GetPurchasesDetails(int userId, int movieId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task AddMovieReview(ReviewRequestModel reviewRequest)
+        {
+            var Review = new Review
+            {
+                MovieId = reviewRequest.MovieId,
+                Rating = reviewRequest.Rating,
+                ReviewText = reviewRequest.ReviewText,
+                UserId = reviewRequest.UserId                
+            };
+
+            var addReview = await _reviewRepository.Add(Review);            
+        }
+
+        public async Task UpdateMovieReview(ReviewRequestModel reviewRequest)
+        {
+            var review = new Review
+            {
+                MovieId = reviewRequest.MovieId,
+                Rating = reviewRequest.Rating,
+                ReviewText = reviewRequest.ReviewText,
+                UserId = reviewRequest.UserId
+            };
+
+            var updateReview = await _reviewRepository.Update(review);
+        }
+
+        public async Task DeleteMovieReview(int userId, int movieId)
+        {
+/*            var review = _reviewRepository.Get(r => r.UserId == userId && r.MovieId == movieId);
+            var addReview = await _reviewRepository.Delete(review);*/
+        }
+
+        public async Task<ReviewResponseModel> GetAllReviewsByUser(int id)
+        {
+            var reviews = await _reviewRepository.GetUserReviews(id);
+            var movieReviews = new MovieReviewResponseModel();
+            var reviewList = new List<MovieReviewResponseModel>();
+            foreach (var review in reviews)
+            {
+                var movie = await _movieRepository.GetById(review.MovieId);
+                movieReviews.MovieId = review.MovieId;
+                movieReviews.Rating = review.Rating;
+                movieReviews.ReviewText = review.ReviewText;
+                movieReviews.UserId = review.UserId;
+                movieReviews.CardUrl = movie.PosterUrl;
+                reviewList.Add(movieReviews);
+            }
+            var reviewResponse = new ReviewResponseModel
+            {
+                UserId = id,
+                MovieReviews = reviewList
+            };
+
+            return reviewResponse;
         }
     }
 }

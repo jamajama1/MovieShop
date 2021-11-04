@@ -34,6 +34,14 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Favorite>(ConfigureFavorite);
             modelBuilder.Entity<Purchase>(ConfigurePurchase);
             modelBuilder.Entity<UserRole>(ConfigureUserRole);
+            modelBuilder.Entity<Genre>(ConfigureGenre);
+        }
+
+        private void ConfigureGenre(EntityTypeBuilder<Genre> builder)
+        {
+            builder.ToTable("Genre");
+            builder.HasKey(g => g.Id);
+            builder.Property(g => g.Name).HasMaxLength(64);
         }
 
         private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
@@ -158,8 +166,8 @@ namespace Infrastructure.Data
             builder.Property(m => m.BackdropUrl).HasMaxLength(2084);
             builder.Property(m => m.OriginalLanguage).HasMaxLength(64);
             builder.Property(m => m.Price).HasColumnType("decimal(5, 2)").HasDefaultValue(9.9m);
-            builder.Property(m => m.Budget).HasColumnType("decimal(18, 4)").HasDefaultValue(9.9m);
-            builder.Property(m => m.Revenue).HasColumnType("decimal(18, 4)").HasDefaultValue(9.9m);
+            builder.Property(m => m.Budget).HasColumnType("decimal(18, 2)").HasDefaultValue(9.9m);
+            builder.Property(m => m.Revenue).HasColumnType("decimal(18, 2)").HasDefaultValue(9.9m);
             builder.Property(m => m.CreatedDate).HasDefaultValueSql("getdate()");
 
             //we wanna tell EF to ignore Rating property and not create the columns

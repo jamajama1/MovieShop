@@ -11,6 +11,12 @@ namespace ApplicationCore.Entities
     [Table("Genre")]
     public class Genre
     {
+        public Genre(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
         public int Id { get; set; }
 
         [MaxLength(64)]

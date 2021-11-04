@@ -17,9 +17,20 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async Task<IEnumerable<Purchase>> GetUserPurchases(int id)
+        public async Task<IEnumerable<Purchase>> GetAllPurchases(int id)
         {
-            var purchases = await _dbContext.Purchases.Where(f => f.UserId == id).Include(p=> p.Movie).ToListAsync();
+            var purchases = await _dbContext.Purchases.Include(p => p.Movie).Where(f => f.UserId == id).ToListAsync();
+
+            return purchases;
+
+            /*var movie = await _dbContext.Movies.Include(m => m.Casts).ThenInclude(m => m.Cast)
+                .Include(m => m.Genres).ThenInclude(m => m.Genre).Include(m => m.Trailers)
+                .FirstOrDefaultAsync(m => m.Id == id);*/
+        }
+
+        public async Task<Purchase> CheckPurchaseByMovieId(int id)
+        {
+            var purchases = await _dbContext.Purchases.Where(p=>p.MovieId == id).SingleAsync();
 
             return purchases;
 

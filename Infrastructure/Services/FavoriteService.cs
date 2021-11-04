@@ -13,11 +13,42 @@ namespace Infrastructure.Services
     public class FavoriteService : IFavoriteService
     {
         private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IMovieRepository _movieRepository;
 
-        public FavoriteService(IFavoriteRepository favoriteRepository)
+        public FavoriteService(IFavoriteRepository favoriteRepository, IMovieRepository movieRepository)
         {
             _favoriteRepository = favoriteRepository;
+            _movieRepository = movieRepository;
         }
+
+        public async Task AddFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            var newFavorite = await _favoriteRepository.Add(new Favorite
+            {
+                MovieId = favoriteRequest.MovieId,
+                UserId = favoriteRequest.UserId
+            });
+        }
+
+        public async Task<FavoriteResponseModel> GetAllFavoritesForUser(int id)
+        {
+            var favorites = await _favoriteRepository.GetAll();
+            if (favorites == null) throw new Exception("No favorite movies found");
+            var favoriteMovie = new FavoriteResponseModel();
+            var favoriteCard = new MovieCardResponseModel();
+            favoriteMovie.UserId = id;
+            foreach (var favorite in favorites)
+            {
+                favoriteCard.Id = favorite.Id;
+                var movie = _movieRepository.GetMovieById(favorite.MovieId);
+                favoriteCard.PosterUrl = movie.Result.PosterUrl;
+                favoriteCard.Title = movie.Result.Title;
+                favoriteMovie.FavoriteMovies.Add(favoriteCard);
+            }
+
+            return favoriteMovie;
+        }
+
         public async Task<List<MovieCardResponseModel>> GetUserFavorites(int id)
         {
             var favoriteList = await _favoriteRepository.Get(f=> f.UserId == id);
@@ -43,16 +74,9 @@ namespace Infrastructure.Services
             return favoriteMovieCard;
         }
 
-        public async Task<int> PostFavorite(UserFavoriteRequestModel requestModel)
+        public async Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
         {
-            var favorite = new Favorite
-            {
-                MovieId = requestModel.MovieId,
-                UserId = requestModel.UserId
-            };
-
-            var favoriteId = await _favoriteRepository.Add(favorite);
-            return favoriteId.Id;
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,25 +16,23 @@ namespace MovieShopAPI.Controllers
         // create an api method that shows top 30 movies
         private readonly IMovieService _movieService;
         private readonly IUserService _userService;
-        private readonly IReviewService _reviewService;
-        private readonly IGenreService _genreService;
+        private readonly IReviewService _reviewService;        
 
         public MoviesController(IMovieService imovieService, IUserService userService,
-                                IReviewService reviewService, IGenreService genreService)
+                                IReviewService reviewService)
         {
             _movieService = imovieService;
             _userService = userService;
-            _reviewService = reviewService;
-            _genreService = genreService;
+            _reviewService = reviewService;            
         }
 
 
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAll ()
+        public async Task<IActionResult> GetAllMovies()
         {
-            var movie = await _movieService.GetAll();
+            var movie = await _movieService.GetAllMovies();
 
             if (movie == null)
             {
@@ -110,14 +108,6 @@ namespace MovieShopAPI.Controllers
             // before .Net Core, we use NewSoft.JSON library
             // since .Net Core, Microsoft created its own JSON serialization library
             // System.Text.Json, preferred method
-        }
-
-        [HttpGet]
-        [Route("genre")]
-        public async Task<IActionResult> GetGenres()
-        {
-            var genres = await _genreService.GetGenres();
-            return Ok(genres);
         }
 
         [HttpGet]

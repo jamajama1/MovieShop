@@ -19,12 +19,13 @@ namespace Infrastructure.Services
             _movieRepository = movieRepository;
         }
 
-        public async Task<MovieDetailsResponseModel> GetAll()
+        public async Task<List<MovieDetailsResponseModel>> GetAllMovies()
         {
-            var movies = await _movieRepository.GetAll();
+            var movies = await _movieRepository.GetAllMovies();
             if (movies == null) throw new Exception("Movie");
 
             var movieDetails = new MovieDetailsResponseModel();
+            var allMovieDetails = new List<MovieDetailsResponseModel>();
             foreach (var movie in movies)
             {
                 movieDetails = new MovieDetailsResponseModel
@@ -69,9 +70,10 @@ namespace Infrastructure.Services
                         TrailerUrl = trailer.TrailerUrl,
                         MovieId = trailer.MovieId
                     });
+                allMovieDetails.Add(movieDetails);
             }
 
-            return movieDetails;
+            return allMovieDetails;
         }
 
         public async Task<MovieDetailsResponseModel> GetMovieDetails(int id)
@@ -127,7 +129,6 @@ namespace Infrastructure.Services
         public async Task<List<MovieCardResponseModel>> GetMoviesByGenre(int id)
         {
             var movies = await _movieRepository.GetAll();
-            //error maybe becuase we ignored rating column?
 
             var moviesByGenre = new List<Movie>();
             foreach (var movie in movies)

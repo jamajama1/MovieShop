@@ -17,6 +17,14 @@ namespace Infrastructure.Repositories
 
         }
 
+        public async Task<List<Movie>> GetAllMovies()
+        {
+            var movie = await _dbContext.Movies.Include(m => m.Casts).ThenInclude(m => m.Cast)
+                .Include(m => m.Genres).ThenInclude(m => m.Genre).Include(m => m.Trailers).DefaultIfEmpty().ToListAsync();
+
+            return movie;
+        }
+
         public async Task<Movie> GetMovieById(int id)
         {
             var movie = await _dbContext.Movies.Include(m => m.Casts).ThenInclude(m => m.Cast)
@@ -32,9 +40,7 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Movie>> GetMoviesByGenre(int id)
         {
-            var movies = await _dbContext.Movies.Include(m => m.Casts).ThenInclude(m => m.Cast)
-                .Include(m => m.Genres).ThenInclude(m => m.Genre).Include(m => m.Trailers)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movies = await _dbContext.Movies.Include(m => m.Genres).ThenInclude(m => m.Genre).FirstOrDefaultAsync(m => m.Id == id);
             var movieGenre = new Movie();
             var movieGenres = new List<Movie>();
             foreach (var movie in movies.Genres)
@@ -51,7 +57,20 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Movie>> GetTop30RatedMovies()
         {
-            var movies = await _dbContext.Movies.OrderByDescending(m => m.Rating).Take(30).ToListAsync();
+            // var movies = await _dbContext.Movies.OrderByDescending(m => m.Rating).Take(30).ToListAsync();
+            // going to review table
+            // movieid, title, posterurl, rating =>
+            // 
+            var movies = await _dbContext.Reviews.Include(r => r.Movie)
+                .GroupBy(r => new { Id = r.MovieId, r.Movie.PosterUrl })
+                .OrderByDescending(g => g.Average(m => m.Rating))
+                .Select(m =>
+                new Movie
+                {
+                    Id = m.Key.Id,
+                    PosterUrl = m.Key.PosterUrl,
+                    Rating = m.Average(x => x.Rating)
+                }).Take(30).ToListAsync();
             return movies;
         }
 

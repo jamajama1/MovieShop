@@ -9,7 +9,6 @@ namespace ApplicationCore.ServiceInterfaces
 {
     public interface IPurchaseService
     {
-        Task<List<MovieCardResponseModel>> GetUserPurchases(int id);
-        Task<int> PurchaseMovie(UserPurchaseRequestModel requestModel);
+        Task<List<MovieCardResponseModel>> GetAllPurchases(int id);
     }
 }

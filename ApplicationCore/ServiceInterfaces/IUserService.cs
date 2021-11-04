@@ -12,5 +12,25 @@ namespace ApplicationCore.ServiceInterfaces
     {
         Task<int> RegisterUser(UserRegisterRequestModel requestModel);
         Task<UserLoginResponseModel> LoginUser(UserLoginRequestModel requestModel);
+        public Task<PurchaseDetailsResponseModel> PurchaseMovie(PurchaseRequestModel purchaseRequest, int userId);
+
+        public Task<bool> IsMoviePurchased(PurchaseRequestModel purchaseRequest, int userId);
+
+        public Task<PurchaseResponseModel> GetAllPurchasesForUser(int id);
+
+
+        public Task<PurchaseDetailsResponseModel> GetPurchasesDetails(int userId, int movieId);
+
+
+        public  Task AddMovieReview(ReviewRequestModel reviewRequest);
+
+
+        public Task UpdateMovieReview(ReviewRequestModel reviewRequest);
+
+
+        public Task DeleteMovieReview(int userId, int movieId);
+
+
+        public Task<ReviewResponseModel> GetAllReviewsByUser(int id);
     }
 }

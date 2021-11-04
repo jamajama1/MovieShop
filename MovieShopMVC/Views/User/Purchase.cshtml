@@ -1,0 +1,44 @@
+﻿@model ApplicationCore.Models.PurchaseDetailsResponseModel
+
+@{
+    ViewData["Title"] = "Purchase";
+}
+
+<h2>Thank you for your purchase, your movie is ready for viewing.</h2>
+<h5>Purchase Details</h5>
+
+<div>
+    <hr />    
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PurchaseNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PurchaseNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TotalPrice)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PurchaseDateTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PurchaseDateTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <partial name="_RecieptMovieCard" model="@Html.DisplayFor(model => model.PosterUrl)" /> 
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Purchases">View Purchase List</a>
+</div>

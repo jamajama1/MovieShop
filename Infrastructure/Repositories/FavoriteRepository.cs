@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using ApplicationCore.RepositoryInterfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,20 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async Task<IEnumerable<Favorite>> GetUserFavorites(int id)
+        public Task AddFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Favorite>> GetAllFavoritesForUser(int id)
         {
             var favorite = await _dbContext.Favorites.Include(f => f.Movie).OrderByDescending(f => f.Id).ToListAsync();
-            
             return favorite;
+        }
 
+        public Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            throw new NotImplementedException();
         }
     }
 }
