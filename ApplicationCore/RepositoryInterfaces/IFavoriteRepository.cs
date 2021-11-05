@@ -1,5 +1,4 @@
 ﻿using ApplicationCore.Entities;
-using ApplicationCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +9,6 @@ namespace ApplicationCore.RepositoryInterfaces
 {
     public interface IFavoriteRepository: IAsyncRepository<Favorite>
     {
-        public Task AddFavorite(FavoriteRequestModel favoriteRequest);
-        public Task RemoveFavorite(FavoriteRequestModel favoriteRequest);
-        public Task<IEnumerable<Favorite>> GetAllFavoritesForUser(int id);
-
-
+        public Task<List<Favorite>> GetUserFavorites(int id);
     }
 }

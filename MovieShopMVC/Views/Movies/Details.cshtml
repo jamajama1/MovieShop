@@ -46,9 +46,12 @@
             </dl>
         </div>
         <div class="col">
-            <br /><button style="width: 200px;" type="button" class="btn btn-outline-light">Review</button><br /><br />
-            <form method="POST" asp-action="Favorite">
-                <button style="width: 200px;" type="submit" class="btn btn-outline-light">Favorite</button>
+            <br />
+            <form method="GET" asp-controller="User" asp-action="AddReview">
+                <button style="width: 200px; color: white" type="hidden" id="MovieId" name="MovieId" value="@Model.Id" class="btn btn-outline-light">Review</button><br /><br />
+            </form>
+            <form method="POST" asp-controller="User" asp-action="Favorite">
+                <button style="width: 200px;" type="hidden" id="MovieId" name="MovieId" value="@Model.Id" class="btn btn-outline-light">Favorite</button>
             </form><br />
             @if (true)
             {

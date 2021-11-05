@@ -18,20 +18,10 @@ namespace Infrastructure.Repositories
 
         }
 
-        public Task AddFavorite(FavoriteRequestModel favoriteRequest)
+        public async Task<List<Favorite>> GetUserFavorites(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Favorite>> GetAllFavoritesForUser(int id)
-        {
-            var favorite = await _dbContext.Favorites.Include(f => f.Movie).OrderByDescending(f => f.Id).ToListAsync();
-            return favorite;
-        }
-
-        public Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
-        {
-            throw new NotImplementedException();
+            var favorites = await _dbContext.Favorites.Include(m => m.Movie).Where(m => m.UserId == id).OrderByDescending(o => o.Id).DefaultIfEmpty().ToListAsync();
+            return favorites;
         }
     }
 }

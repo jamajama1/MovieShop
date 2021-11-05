@@ -19,8 +19,7 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Review>> GetUserReviews(int id)
         {
-            var reviews = await _dbContext.Reviews.Include(u=>u.User).Where(u=> u.UserId == id).Include(f => f.Movie).OrderByDescending(f => f.MovieId).ToListAsync();
-
+            var reviews = await _dbContext.Reviews.Include(r => r.Movie).Where(r => r.UserId == id).ToListAsync();
             return reviews;
         }
     }

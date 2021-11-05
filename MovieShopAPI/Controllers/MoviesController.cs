@@ -74,7 +74,7 @@ namespace MovieShopAPI.Controllers
         [Route("toprated")]
         public async Task<IActionResult> GetTop30RatedMovies()
         {
-            var movies = await _movieService.GetTop30RatedMovies();
+            var movies = await _movieService.GetTop30RevenueMovies();
 
             // JSON data and Https status code
             if (!movies.Any())

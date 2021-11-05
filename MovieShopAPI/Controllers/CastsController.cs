@@ -1,4 +1,5 @@
-﻿using Infrastructure.Services;
+﻿using ApplicationCore.ServiceInterfaces;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,9 +13,9 @@ namespace MovieShopAPI.Controllers
     [ApiController]
     public class CastsController : ControllerBase
     {
-        MovieCastService _movieCastService;
+        IMovieCastService _movieCastService;
 
-        public CastsController(MovieCastService movieCastService)
+        public CastsController(IMovieCastService movieCastService)
         {
             _movieCastService = movieCastService;
         }
@@ -23,7 +24,7 @@ namespace MovieShopAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetMovieByCastId(int id)
         {
-            var movie = _movieCastService.GetMovieByCastId(id);
+            var movie = await _movieCastService.GetMovieByCastId(id);
 
             return Ok(movie);
         }

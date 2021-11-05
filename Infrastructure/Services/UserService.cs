@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         //test@abc.com
         //abc123
@@ -21,14 +21,16 @@ namespace Infrastructure.Services
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IMovieRepository _movieRepository;
         private readonly IReviewRepository _reviewRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
 
-        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository, 
-                            IMovieRepository movieRepository, IReviewRepository reviewRepository)
+        public UserService(IUserRepository userRepository, IPurchaseRepository purchaseRepository, IMovieRepository movieRepository, 
+                            IReviewRepository reviewRepository, IFavoriteRepository favoriteRepository)
         {
             _userRepository = userRepository;
             _purchaseRepository = purchaseRepository;
             _movieRepository = movieRepository;
             _reviewRepository = reviewRepository;
+            _favoriteRepository = favoriteRepository;
         }
 
         public async Task<int> RegisterUser(UserRegisterRequestModel requestModel)
@@ -111,7 +113,43 @@ namespace Infrastructure.Services
             return null;
         }
 
+        public async Task AddFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            var favorite = new Favorite
+            {
+                MovieId = favoriteRequest.MovieId,
+                UserId = favoriteRequest.UserId
+            };
 
+            await _favoriteRepository.Add(favorite);
+        }
+
+        public async Task RemoveFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<FavoriteResponseModel> GetAllFavoritesForUser(int id)
+        {
+            var favorites = await _favoriteRepository.GetUserFavorites(id); 
+            var favoriteResponse = new FavoriteResponseModel
+            {
+                UserId = id,
+                FavoriteMovies = new List<MovieCardResponseModel>()
+            };
+            
+
+            var favoriteCards = new MovieCardResponseModel();
+
+            favoriteResponse.FavoriteMovies = favorites.Select(f => new MovieCardResponseModel
+              {
+                  Id = id,
+                  PosterUrl = f.Movie.PosterUrl,
+                  Title = f.Movie.Title
+            }).ToList();
+
+            return favoriteResponse;
+        }
         public async Task<PurchaseDetailsResponseModel> PurchaseMovie(PurchaseRequestModel purchaseRequest, int userId)
         {
 
@@ -166,10 +204,10 @@ namespace Infrastructure.Services
                 MovieId = reviewRequest.MovieId,
                 Rating = reviewRequest.Rating,
                 ReviewText = reviewRequest.ReviewText,
-                UserId = reviewRequest.UserId                
+                UserId = reviewRequest.UserId
             };
 
-            var addReview = await _reviewRepository.Add(Review);            
+            var addReview = await _reviewRepository.Add(Review);
         }
 
         public async Task UpdateMovieReview(ReviewRequestModel reviewRequest)
@@ -187,31 +225,33 @@ namespace Infrastructure.Services
 
         public async Task DeleteMovieReview(int userId, int movieId)
         {
-/*            var review = _reviewRepository.Get(r => r.UserId == userId && r.MovieId == movieId);
-            var addReview = await _reviewRepository.Delete(review);*/
+            /*            var review = _reviewRepository.Get(r => r.UserId == userId && r.MovieId == movieId);
+                        var addReview = await _reviewRepository.Delete(review);*/
         }
 
         public async Task<ReviewResponseModel> GetAllReviewsByUser(int id)
         {
             var reviews = await _reviewRepository.GetUserReviews(id);
-            var movieReviews = new MovieReviewResponseModel();
-            var reviewList = new List<MovieReviewResponseModel>();
-            foreach (var review in reviews)
-            {
-                var movie = await _movieRepository.GetById(review.MovieId);
-                movieReviews.MovieId = review.MovieId;
-                movieReviews.Rating = review.Rating;
-                movieReviews.ReviewText = review.ReviewText;
-                movieReviews.UserId = review.UserId;
-                movieReviews.CardUrl = movie.PosterUrl;
-                reviewList.Add(movieReviews);
-            }
+            //var movieReviews = new MovieReviewResponseModel();
+            //var reviewList = new List<MovieReviewResponseModel>();
+
             var reviewResponse = new ReviewResponseModel
             {
-                UserId = id,
-                MovieReviews = reviewList
+
+                MovieReviews = new List<MovieReviewResponseModel>(),
+                UserId = id
             };
 
+            reviewResponse.MovieReviews = reviews.Select(r => new MovieReviewResponseModel
+            {
+
+                UserId = id,
+                MovieId = r.MovieId,
+                Rating = r.Rating,
+                ReviewText = r.ReviewText,
+                CardUrl = r.Movie.PosterUrl
+            }).ToList();
+         
             return reviewResponse;
         }
     }

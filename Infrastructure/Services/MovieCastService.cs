@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using ApplicationCore.RepositoryInterfaces;
 using ApplicationCore.ServiceInterfaces;
 
@@ -19,10 +20,11 @@ namespace Infrastructure.Services
             _MovieCastRepository = movieCastRepository;
         }
         
-        public async Task<List<MovieCast>> GetMovieByCastId(int id)
+        public async Task<List<MovieCardResponseModel>> GetMovieByCastId(int id)
         {
-            var moviesbycast = await _MovieCastRepository.GetMovieByCastId(id);
-            return moviesbycast;
+            /*var moviesbycast = await _MovieCastRepository.GetMovieByCastId(id);
+            return moviesbycast;*/
+            throw null;
         }
     }
 }

@@ -43,19 +43,27 @@ namespace MovieShopMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Favorite()
+        public async Task<IActionResult> Favorite(FavoriteRequestModel requestModel)
         {
             // Favorite movie when user clicks on favorite button in Movie Details page
-            var favorites = _favoriteService.GetAllFavoritesForUser(_currentUserService.UserId);
-            return View(favorites);
+            requestModel.UserId = _currentUserService.UserId;
+            await _favoriteService.AddFavorite(requestModel);
+            return View("_Thankyou");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Review(ReviewRequestModel requestModel)
+        public async Task<ViewResult> Review(ReviewRequestModel requestModel)
         {
-            // Review movie when user clicks on review button in Movie Details page
-            var review = _reviewService.PostUserReview(requestModel);
-            return View();
+            requestModel.UserId = _currentUserService.UserId;
+            await _userService.AddMovieReview(requestModel);
+            
+            return View("_Thankyou");
+        }
+
+        [HttpGet]
+        public ViewResult AddReview(ReviewRequestModel requestModel)
+        {
+            return View("Review");
         }
 
         [HttpGet]
@@ -74,7 +82,7 @@ namespace MovieShopMVC.Controllers
         public async Task<IActionResult> Favorites()
         {
             // get all the movies favored by user
-            var favorites = await _favoriteService.GetAllFavoritesForUser(32882);
+            var favorites = await _userService.GetAllFavoritesForUser(_currentUserService.UserId);
             return View(favorites.FavoriteMovies);
         }
 
@@ -82,7 +90,7 @@ namespace MovieShopMVC.Controllers
         public async Task<IActionResult> Reviews()
         {
             // get all the movie reviews by user
-            var reviews = await _userService.GetAllReviewsByUser(1);
+            var reviews = await _userService.GetAllReviewsByUser(_currentUserService.UserId);
             return View(reviews);
         }
     }

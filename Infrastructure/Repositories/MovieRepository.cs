@@ -79,7 +79,7 @@ namespace Infrastructure.Repositories
             // we are gonna use EF with LINQ to get top 30 movies by revenue
             // SQL select top 30 * from Movies order by Revenue
             // I/o bound operation
-            var movies = await _dbContext.Movies.OrderByDescending(m => m.Revenue).Take(30).ToListAsync();
+            var movies = await _dbContext.Movies.OrderBy(m => m.Id).Take(30).ToListAsync();
             return movies;
         }
     }

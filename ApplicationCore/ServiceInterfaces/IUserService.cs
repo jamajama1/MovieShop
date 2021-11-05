@@ -27,10 +27,16 @@ namespace ApplicationCore.ServiceInterfaces
 
         public Task UpdateMovieReview(ReviewRequestModel reviewRequest);
 
-
         public Task DeleteMovieReview(int userId, int movieId);
 
 
         public Task<ReviewResponseModel> GetAllReviewsByUser(int id);
+
+        public Task AddFavorite(FavoriteRequestModel favoriteRequest);   
+
+        public Task RemoveFavorite(FavoriteRequestModel favoriteRequest);
+
+        public Task<FavoriteResponseModel> GetAllFavoritesForUser(int id);
+
     }
 }

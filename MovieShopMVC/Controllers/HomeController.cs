@@ -32,7 +32,7 @@ namespace MovieShopMVC.Controllers
         {
             // call movie service class to get list of movie card models
 
-            var movieCards = await  _movieService.GetTop30RevenueMovies();
+            var movieCards = await _movieService.GetTop30RevenueMovies();
             // passing data from controller to view, strongly typed models
             // ViewBag and ViewData
             //  ViewBag.PageTitle = "Top Revenue Movies";

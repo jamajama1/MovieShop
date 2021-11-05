@@ -1,0 +1,34 @@
+﻿@model ApplicationCore.Models.ReviewRequestModel
+
+@{
+    ViewData["Title"] = "Review";
+}
+
+<h1>Review Movie</h1>
+
+<h4>Review</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Review">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="hidden" asp-for="UserId" class="form-control" />
+                <input type="hidden" asp-for="MovieId" class="form-control" />
+                <label asp-for="Rating" class="control-label"></label>
+                <span style="float: left;">&#129314;</span><span style="float: right;">&#128293;</span>
+                <input asp-for="Rating" type="range" id="Rating" name="Rating" min="0" max="10" style="width:100%" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReviewText" class="control-label"></label>
+                <input asp-for="ReviewText" class="form-control" />
+                <span asp-validation-for="ReviewText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

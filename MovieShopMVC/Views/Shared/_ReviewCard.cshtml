@@ -7,27 +7,27 @@
 <table class="table">
     <thead>
         <th>
-
         </th>
         <th>Review</th>
         <th>Rating</th>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img style="height: 200px; width: 140px;" class="card-img" src="@Html.DisplayFor(modelItem => item.CardUrl)" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReviewText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img style="height: 200px; width: 140px;" class="card-img" src="@Html.DisplayFor(modelItem => item.CardUrl)" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReviewText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
